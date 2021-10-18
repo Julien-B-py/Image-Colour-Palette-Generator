@@ -14,20 +14,37 @@
 
 
 
-<div class="all-colors">
+
+    <img class="resized-img" src="{{url_for('.static', filename='uploads/test.png')}}">
+
+
+{% set number = 1 %}
+<div class="all-colors container-fluid">
     <div class="row">
         {% for color in top_colors %}
-        <div class="col-lg-4 col-sm-6 color-box" style="background-color:{{color.hex}};">
-            <div class="color-codes">
-                <p>RGB: {{color.rgb}}</p>
-                <p>HEX: {{color.hex}}</p>
-                <p>{{color.rate}}%</p>
+        <div class="col-lg-4 col-sm-6 color-box" >
+
+            <div class="color-header" style="background-color:{{color.hex}};">
+                <div class="color-rank">{{ loop.index }}</div>
+
+            </div>
+
+            <div class="color-body">
+                <div class="color-details">
+                    <p>RGB: {{color.rgb}}</p>
+                    <p>HEX: {{color.hex}}</p>
+                    <p>Ratio: {{color.rate}}%</p>
+                </div>
             </div>
 
         </div>
+
         {% endfor %}
     </div>
 </div>
+
+
+<div></div>
 
 
 
