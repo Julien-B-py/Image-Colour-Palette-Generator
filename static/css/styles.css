@@ -1,4 +1,31 @@
 .color-box {
-    width:200px;
+    align-items: center;
+    border-radius:10px;
+    border-style: solid;
+    border-width: thin;
+    display: flex;
     height:100px;
+    justify-content: center;
+    margin: 1rem;
+    padding:10px;
+    width:200px;
+}
+
+.color-box:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+
+
+.all-colors {
+    display: flex;
+    margin: 100px auto;
+    width: 50%;
+}
+
+.all-colors p {
+    font-weight: 600;
+    margin:0;
+    padding:5px 0;
+    text-transform: uppercase;
 }
