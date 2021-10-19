@@ -13,17 +13,28 @@
 
 {% block content %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+<div class="inner-body">
 
-<!-- WTForm goes here -->
-{{ wtf.quick_form(form) }}
+    <h1>Welcome to my color palette website</h1>
+
+
+    <img class="example-palette" src="{{url_for('.static', filename='img/example.png')}}">
+
+    <div class="custom-form">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- WTForm goes here -->
+        {{ wtf.quick_form(form) }}
+    </div>
+
+</div>
 
 {% endblock %}

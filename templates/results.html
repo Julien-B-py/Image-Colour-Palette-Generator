@@ -12,49 +12,58 @@
 
 {% block content %}
 
+<div class="inner-body">
 
+
+    <h1>Your image</h1>
 
 
     <img class="resized-img" src="{{url_for('.static', filename='uploads/'+filename)}}">
 
 
-{% set number = 1 %}
-<div class="all-colors container-fluid">
-    <div class="row">
-        {% for color in top_colors %}
-        <div class="col-lg-4 col-sm-6 color-box" >
 
-            <div class="color-header" style="background-color:{{color.hex}};">
-                <div class="color-rank">{{ loop.index }}</div>
+    <h1>Top 20 used colors</h1>
 
-            </div>
 
-            <div class="color-body">
-                <div class="color-details">
-                    <p>RGB: {{color.rgb}}</p>
-                    <p>HEX: {{color.hex}}</p>
-                    <p>Ratio: {{color.rate}}%</p>
+    {% set number = 1 %}
+    <div class="all-colors container-fluid">
+        <div class="row">
+            {% for color in top_colors %}
+            <div class="col-lg-4 col-sm-6 color-box" >
+
+                <div class="color-header" style="background-color:{{color.hex}};">
+                    <div class="color-rank">{{ loop.index }}</div>
+
                 </div>
+
+                <div class="color-body">
+                    <div class="color-details">
+                        <p>RGB: {{color.rgb}}</p>
+                        <p>HEX: {{color.hex}}</p>
+                        <p>Ratio: {{color.rate}}%</p>
+                    </div>
+                </div>
+
             </div>
 
+            {% endfor %}
         </div>
-
-        {% endfor %}
     </div>
-</div>
 
 
-<!--COLOR PALETTE -->
+    <!--COLOR PALETTE -->
 
-<div class="color-palette">
+    <h1>Color palette</h1>
+
+    <div class="color-palette">
 
         {% for color in color_palette %}
 
 
-            <div class="color-place" style="background-color:{{color}};">
+        <div class="color-place" style="background-color:{{color}};">
 
 
-            </div>
+        </div>
 
 
 
@@ -68,8 +77,8 @@
 <!--END COLOR PALETTE-->
 
 
-<div></div>
 
 
+</div>
 
 {% endblock %}

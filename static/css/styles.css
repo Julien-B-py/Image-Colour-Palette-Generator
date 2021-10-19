@@ -31,11 +31,11 @@
     font-weight: 600;
     height:40px;
     justify-content: center;
-    text-align:center;
-    width:40px;
-    position:absolute;
-    top:10px;
     left:10px;
+    position:absolute;
+    text-align:center;
+    top:10px;
+    width:40px;
 }
 
 .color-body {
@@ -49,8 +49,10 @@
 
 .all-colors {
     display: flex;
-    margin: 100px auto;
-    width: 50%;
+    margin: 0 auto;
+    margin-bottom:100px;
+    width: 85%;
+
 }
 
 .all-colors p {
@@ -66,11 +68,13 @@
 }
 
 .resized-img {
-object-fit: contain
-    width:740px;
+    border-radius: .25rem;
+    display: block;
     height:400px;
-      display: block;
-  margin: 70px auto 0;
+
+    margin: 0 auto 100px;
+    object-fit: contain
+    width:740px;
  }
 
 
@@ -81,17 +85,83 @@ object-fit: contain
 
 
 .color-palette {
-    width: 300px;
-    height:300px;
-    display: flex;
     border-radius:10px;
+    border: solid thin rgba(0, 0, 0, .2);
+    box-shadow: rgba(128, 128, 128, 0.2) 0px 8px 24px;
+    display: flex;
+    height:300px;
+    margin:  auto;
     overflow:hidden;
-    margin: 100px auto;
+    width: 300px;
 
 }
 
 .color-place {
-width:50%;
     height:100%;
+    width:50%;
+
 
 }
+
+
+.inner-body {
+    background-color:#ffffff;
+    margin:0 auto;
+    padding: 180px 0;
+    width:1100px;
+
+}
+
+body {
+    background-color:#e6ebf2;
+    margin:0;
+
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+
+
+
+
+@media (max-width: 1280px) {
+
+.inner-body {
+    width:600px;
+
+    }
+
+
+.resized-img {
+
+    height:100%;
+    width:80%;
+}
+
+}
+
+
+.custom-form {
+    width:80%;
+    margin:auto;
+    text-align: center;
+}
+
+#image_file {
+    margin:auto;
+    padding: 10px 0;
+}
+
+
+.example-palette {
+display: block;
+
+    margin: 0 auto 50px;
+}
+
+

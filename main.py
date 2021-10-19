@@ -37,20 +37,23 @@ def analyse_image():
             filename = secure_filename(image_file.filename)
             # If a file has been uploaded, store it in the upload folder
             if filename:
+
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
                 image_file.save(image_path)
 
                 image = IMG(image_path)
-                top_colors = image.analyse(colors=200)
+                top_colors = image.analyse(colors=250)
 
                 ### TEST CLEANUP
+
+
 
                 to_clean = top_colors.copy()
                 print(to_clean)
                 clean = []
 
-                while to_clean:
+                while to_clean and len(clean)!=10:
 
                     current_color = to_clean[0]
 
@@ -79,7 +82,11 @@ def analyse_image():
 
                     del to_clean[0]
 
-                print(clean)
+
+
+
+                clean.sort(key=lambda x: int(x[0]) + int(x[1])+ int(x[2]))
+
 
                 color_palette = []
                 for value in clean:
@@ -88,11 +95,12 @@ def analyse_image():
                     b = value[2]
                     color_palette.append(f'#{convert_to_hex(r)}{convert_to_hex(g)}{convert_to_hex(b)}')
 
-                print(color_palette)
 
-                ### FIN TEST
 
-                return render_template('results.html', top_colors=top_colors, filename=filename, color_palette=color_palette)
+
+
+
+                return render_template('results.html', top_colors=top_colors[:20], filename=filename, color_palette=color_palette)
 
         flash('This file is not valid, please select an image')
 
