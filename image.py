@@ -7,7 +7,7 @@ from utils import convert_to_hex
 class IMG:
     def __init__(self, image):
         self.image = Image.open(image)
-        self.image_max_size = (100, 100)
+        self.image_max_size = (200, 200)
         self.resize()
         self.to_array()
 
