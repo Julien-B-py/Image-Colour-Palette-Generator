@@ -15,14 +15,39 @@
 <div class="inner-body">
 
 
-    <h1>Your image</h1>
+    <h1>Your image color palette</h1>
 
 
-    <img class="resized-img" src="{{url_for('.static', filename='uploads/'+filename)}}">
+    <div class="img-palette">
+
+        <img class="resized-img" src="{{url_for('.static', filename='uploads/'+filename)}}">
 
 
 
-    <h1>Top 20 used colors</h1>
+        <div class="color-palette">
+
+            {% for color in color_palette %}
+
+
+            <div class="color-place" style="background-color:{{color}};">
+
+
+            </div>
+
+
+
+
+
+            {% endfor %}
+        </div>
+
+
+
+    </div>
+
+
+
+    <h1>Top 20 colors occurrences</h1>
 
 
     {% set number = 1 %}
@@ -51,30 +76,13 @@
     </div>
 
 
-    <!--COLOR PALETTE -->
-
-    <h1>Color palette</h1>
-
-    <div class="color-palette">
-
-        {% for color in color_palette %}
-
-
-        <div class="color-place" style="background-color:{{color}};">
-
-
-        </div>
 
 
 
-
-
-        {% endfor %}
-    </div>
 </div>
 
 
-<!--END COLOR PALETTE-->
+
 
 
 
