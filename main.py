@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # Specify the path where the app will store the uploaded files
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+# Specify the max file size that can be uploaded
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 3MB
 
 Bootstrap(app)
@@ -33,6 +33,7 @@ def analyse_image():
 
         image_file = form.image_file.data
 
+        # If file extension is in the whitelist allow upload
         if allowed_file(image_file.filename):
 
             # Always use that function to secure a filename (Flask doc)
@@ -40,22 +41,23 @@ def analyse_image():
             # If a file has been uploaded, store it in the upload folder
             if filename:
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
                 image_file.save(image_path)
 
+                # Image color analyze and color palette extraction
                 image = IMG(image_path)
-                top_colors = image.analyse(colors=250)
-
+                # Get list of dict containing the 250 most common colors including rgb, hex and percentage values
+                top_colors = image.analyze(colors=250)
+                # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
                 color_palette = image.get_color_palette()
 
                 return render_template('results.html', top_colors=top_colors[:20], filename=filename,
                                        color_palette=color_palette)
 
+        # If file extension is not authorized
         flash('This file is not valid, please select an image')
 
     return render_template('upload.html', form=form)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     app.run(debug=True)
