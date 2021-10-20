@@ -1,3 +1,97 @@
+/*** HTML TAGS ***/
+body {
+    background-color:#e6ebf2;
+    margin:0;
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+/*** INNER BODY SECTION ***/
+.inner-body {
+    background-color:#ffffff;
+    margin:0 auto;
+    padding: 100px 0 100px;
+    width:1100px;
+}
+
+/*** HOME PAGE ***/
+.example-palette {
+    display: block;
+    margin: 0 auto 50px;
+}
+
+/*** CUSTOM FORM ***/
+#image_file {
+    margin:auto;
+    padding: 10px 0;
+}
+
+.custom-form {
+    margin:auto;
+    padding-bottom:150px;
+    text-align: center;
+    width:80%;
+}
+
+.flashes {
+    color:red;
+}
+
+/*** IMG WITH COLOR PALETTE ***/
+.img-palette {
+    border-radius:10px;
+    border: solid thin rgba(0, 0, 0, .2);
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    display: block;
+    height:auto;
+    margin: 0 auto 100px;
+    overflow:hidden;
+    width:500px;
+}
+
+.resized-img {
+    border-bottom: solid thin rgba(0, 0, 0, .2);
+    height: auto;
+    object-fit: contain;
+    width:100%;
+ }
+
+.color-palette {
+    display: flex;
+    height:50px;
+    overflow:hidden;
+    width:100%;
+}
+
+.color-place {
+    height:100%;
+    width:50%;
+}
+
+/*** TOP 20 INDIVIDUAL COLORS SECTION ***/
+.all-colors {
+    display: flex;
+    margin: 0 auto;
+    margin-bottom:100px;
+    width: 85%;
+}
+
+.all-colors p {
+    font-weight: 600;
+    margin:0;
+    padding:5px 0;
+    text-transform: uppercase;
+}
+
+.row {
+    margin: 0 auto;
+}
+
 .color-box {
     align-items: center;
     border-radius:10px;
@@ -13,7 +107,6 @@
 .color-box:hover {
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
-
 
 .color-header {
     border-bottom: solid thin;
@@ -47,160 +140,35 @@
     margin-left:30px;
 }
 
-.all-colors {
-    display: flex;
-    margin: 0 auto;
-    margin-bottom:100px;
-    width: 85%;
-
-}
-
-.all-colors p {
-    font-weight: 600;
-    margin:0;
-    padding:5px 0;
-    text-transform: uppercase;
-}
-
-
-
-.resized-img {
-
-    width:100%;
-    height: auto;
-
-    object-fit: contain;
-        border-bottom: solid thin rgba(0, 0, 0, .2);
-
- }
-
-
-
-
-
-.img-palette {
-
-display: block;
-height:auto;
-margin: 0 auto 100px;
-width:500px;
-    border-radius:10px;
-    border: solid thin rgba(0, 0, 0, .2);
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
-
-    overflow:hidden;
-}
-
-
-
-.row {
-    margin: 0 auto;
-}
-
-
-.color-palette {
-
-    display: flex;
-    height:50px;
-    overflow:hidden;
-    width:100%;
-
-}
-
-.color-place {
-    height:100%;
-    width:50%;
-
-
-}
-
-
-.inner-body {
-    background-color:#ffffff;
-    margin:0 auto;
-    padding: 100px 0 180px;
-    width:1100px;
-
-}
-
-body {
-    background-color:#e6ebf2;
-    margin:0;
-
-}
-
-h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom:50px;
-    text-align:center;
-}
-
-
-
-
-
-
-
-
-.custom-form {
-    width:80%;
-    margin:auto;
-    text-align: center;
-}
-
-#image_file {
-    margin:auto;
-    padding: 10px 0;
-}
-
-
-.example-palette {
-display: block;
-
-    margin: 0 auto 50px;
-}
-
-
+/*** MEDIA QUERIES ***/
 @media (max-width: 1280px) {
 
-.inner-body {
-    width:600px;
-
+    .inner-body {
+        width:600px;
     }
 
-
-.img-palette {
-
-    height:6%;
-    width:65%;
-}
+    .img-palette {
+        height:6%;
+        width:65%;
+    }
 
 }
-
 
 @media (max-width: 640px) {
 
-.inner-body {
-    width:450px;
-
+    .inner-body {
+        width:450px;
     }
 
+    .img-palette {
+        height:50%;
+        width:50%;
+    }
 
-
-.img-palette {
-
-    height:50%;
-    width:50%;
-}
-
-
-.color-palette {
-
-
-    height:25px;
-
+    .color-palette {
+        height:25px;
+    }
 
 }
 
-}
+

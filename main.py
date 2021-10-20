@@ -19,6 +19,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # Specify the path where the app will store the uploaded files
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 3MB
+
 Bootstrap(app)
 
 
@@ -37,7 +39,6 @@ def analyse_image():
             filename = secure_filename(image_file.filename)
             # If a file has been uploaded, store it in the upload folder
             if filename:
-
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
                 image_file.save(image_path)
@@ -45,62 +46,10 @@ def analyse_image():
                 image = IMG(image_path)
                 top_colors = image.analyse(colors=250)
 
-                ### TEST CLEANUP
+                color_palette = image.get_color_palette()
 
-
-
-                to_clean = top_colors.copy()
-                print(to_clean)
-                clean = []
-
-                while to_clean and len(clean)!=10:
-
-                    current_color = to_clean[0]
-
-                    too_close = False
-
-                    r = current_color['rgb'][0]
-                    g = current_color['rgb'][1]
-                    b = current_color['rgb'][2]
-
-                    if clean:
-                        for color_2 in clean:
-                            r_2 = color_2[0]
-                            g_2 = color_2[1]
-                            b_2 = color_2[2]
-
-                            if abs(int(r) - int(r_2)) <= 24 and abs(int(g) - int(g_2)) <= 24 and abs(
-                                    int(b) - int(b_2)) <= 24:
-                                too_close = True
-
-                        if not too_close:
-                            clean.append((r, g, b))
-
-
-                    if not clean:
-                        clean.append((r, g, b))
-
-                    del to_clean[0]
-
-
-
-
-                clean.sort(key=lambda x: int(x[0]) + int(x[1])+ int(x[2]))
-
-
-                color_palette = []
-                for value in clean:
-                    r=value[0]
-                    g = value[1]
-                    b = value[2]
-                    color_palette.append(f'#{convert_to_hex(r)}{convert_to_hex(g)}{convert_to_hex(b)}')
-
-
-
-
-
-
-                return render_template('results.html', top_colors=top_colors[:20], filename=filename, color_palette=color_palette)
+                return render_template('results.html', top_colors=top_colors[:20], filename=filename,
+                                       color_palette=color_palette)
 
         flash('This file is not valid, please select an image')
 

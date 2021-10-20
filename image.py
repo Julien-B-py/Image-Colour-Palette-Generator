@@ -32,6 +32,53 @@ class IMG:
         return self.top_colors
 
 
+
+
+    def get_color_palette(self):
+        to_clean = self.top_colors.copy()
+        clean = []
+
+        while to_clean and len(clean) != 10:
+
+            current_color = to_clean[0]
+
+            too_close = False
+
+            r = current_color['rgb'][0]
+            g = current_color['rgb'][1]
+            b = current_color['rgb'][2]
+
+            if clean:
+                for color_2 in clean:
+                    r_2 = color_2[0]
+                    g_2 = color_2[1]
+                    b_2 = color_2[2]
+
+                    if abs(int(r) - int(r_2)) <= 24 and abs(int(g) - int(g_2)) <= 24 and abs(
+                            int(b) - int(b_2)) <= 24:
+                        too_close = True
+
+                if not too_close:
+                    clean.append((r, g, b))
+
+            if not clean:
+                clean.append((r, g, b))
+
+            del to_clean[0]
+
+        clean.sort(key=lambda x: int(x[0]) + int(x[1]) + int(x[2]))
+
+        self.color_palette = []
+        for value in clean:
+            r = value[0]
+            g = value[1]
+            b = value[2]
+            self.color_palette.append(f'#{convert_to_hex(r)}{convert_to_hex(g)}{convert_to_hex(b)}')
+
+        return self.color_palette
+
+
+
     def get_most_frequent_rgb_values(self, colors=10):
         # Create a dict to store every single RGB value from the image as the key and the occurrence count as value
         self.rgb_occurrences = {}
