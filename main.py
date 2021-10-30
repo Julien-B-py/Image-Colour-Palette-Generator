@@ -45,10 +45,27 @@ def analyse_image():
 
                 # Image color analyze and color palette extraction
                 image = IMG(image_path)
-                # Get list of dict containing the 250 most common colors including rgb, hex and percentage values
-                top_colors = image.analyze(colors=250)
-                # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
-                color_palette = image.get_color_palette()
+
+
+                # # Get list of dict containing the 250 most common colors including rgb, hex and percentage values
+                # top_colors = image.analyze(colors=250)
+
+                top_colors_1 = image.analyze_new(nb_colors=1000)
+
+
+                # # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
+                # color_palette = image.get_color_palette()
+
+
+                color_palette = image.get_color_palette_new()
+
+
+                print('MAIN')
+                print(top_colors_1)
+                print(filename)
+                print(color_palette)
+
+                top_colors = [value for _,value in top_colors_1.items()]
 
                 return render_template('results.html', top_colors=top_colors[:20], filename=filename,
                                        color_palette=color_palette)
