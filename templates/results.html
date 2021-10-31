@@ -20,8 +20,13 @@
 
     <div class="img-palette">
 
+
+        {% if img_data %}
+        <img class="resized-img" src="data:image/jpeg;base64,{{ img_data }}">
+        {% else %}
         <img class="resized-img" src="{{url_for('.static', filename='uploads/'+filename)}}">
 
+        {% endif %}
 
 
         <div class="color-palette">

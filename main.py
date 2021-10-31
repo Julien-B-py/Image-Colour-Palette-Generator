@@ -1,3 +1,5 @@
+import base64
+import io
 import os
 
 from flask import Flask, render_template, flash
@@ -6,15 +8,25 @@ from werkzeug.utils import secure_filename
 
 from forms import UploadImage
 from image import IMG
-from utils import allowed_file, convert_to_hex
+from utils import allowed_file
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-# Specify the path where the app will store the uploaded files
-UPLOAD_FOLDER = r'static\uploads'
+# Create a boolean which will be set to True if the app is running online on Heroku
+running_on_heroku = False
+if 'HEROKU_DEPLOY_VAR' in os.environ:
+    running_on_heroku = True
+
+# Specify the path where the app will store the uploaded files depending on the app location (online or local)
+if running_on_heroku:
+    UPLOAD_FOLDER = '/tmp/'
+    print('ONLINE MODE')
+else:
+    UPLOAD_FOLDER = r'static\uploads'
+    print('LOCAL MODE')
 
 app = Flask(__name__)
 
 # Setup secret key to keep the client-side sessions secure.
+SECRET_KEY = os.environ.get('SECRET_KEY')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # Specify the path where the app will store the uploaded files
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -26,12 +38,14 @@ Bootstrap(app)
 
 @app.route("/", methods=["GET", "POST"])
 def analyse_image():
-    # Create a WTForm
-    form = UploadImage()
+    # Create a WTForm with default values 10 and 24
+    form = UploadImage(nb_colors=10, delta=24)
 
     if form.validate_on_submit():
 
         image_file = form.image_file.data
+        nb_colors = form.nb_colors.data
+        delta = form.delta.data
 
         # If file extension is in the whitelist allow upload
         if allowed_file(image_file.filename):
@@ -46,14 +60,23 @@ def analyse_image():
                 # Image color analyze and color palette extraction
                 image = IMG(image_path)
 
+                # If app is online saves the image contents in memory to pass image data to the template
+                if running_on_heroku:
+                    data = io.BytesIO()
+                    image.image.save(data, "JPEG")
+                    encoded_img_data = base64.b64encode(data.getvalue())
+                    img_data = encoded_img_data.decode('utf-8')
+                else:
+                    img_data = None
+
                 # Get list of dict containing the most common colors including rgb, hex and percentage values
                 top_colors = image.analyze()
 
                 # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
-                color_palette = image.get_color_palette()
+                color_palette = image.get_color_palette(delta=delta, nb_colors=nb_colors)
 
                 # Slice top_colors to only display the 20 most common colors of the image
-                return render_template('results.html', top_colors=top_colors[:20], filename=filename,
+                return render_template('results.html', top_colors=top_colors[:20], img_data=img_data, filename=filename,
                                        color_palette=color_palette)
 
         # If file extension is not authorized
@@ -63,4 +86,4 @@ def analyse_image():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
