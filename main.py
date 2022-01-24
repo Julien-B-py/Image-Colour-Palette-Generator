@@ -2,8 +2,10 @@ import base64
 import io
 import os
 
-from flask import Flask, render_template, flash
+from PIL import Image
+from flask import Flask, render_template, flash, jsonify, request
 from flask_bootstrap import Bootstrap
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from forms import UploadImage
@@ -24,6 +26,7 @@ else:
     print('LOCAL MODE')
 
 app = Flask(__name__)
+CORS(app)
 
 # Setup secret key to keep the client-side sessions secure.
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -34,6 +37,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 3MB
 
 Bootstrap(app)
+
+settings = {"delta": 0, "nb_colors": 0}
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -46,6 +51,8 @@ def analyse_image():
         image_file = form.image_file.data
         nb_colors = form.nb_colors.data
         delta = form.delta.data
+
+        print(image_file)
 
         # If file extension is in the whitelist allow upload
         if allowed_file(image_file.filename):
@@ -83,6 +90,64 @@ def analyse_image():
         flash('This file is not valid, please select an image')
 
     return render_template('upload.html', form=form)
+
+
+# API ROUTES
+
+@app.route("/api/upload", methods=["POST"])
+def upload():
+    nb_colors = settings.get("nb_colors")
+    delta = settings.get("delta")
+
+    file = request.files
+    image_file = file.get('my-image-file')
+
+    # If file extension is in the whitelist allow upload
+    if allowed_file(image_file.filename):
+
+        # Always use that function to secure a filename (Flask doc)
+        filename = secure_filename(image_file.filename)
+        # If a file has been uploaded, store it in the upload folder
+        if filename:
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+
+            # Image color analyze and color palette extraction
+            image = IMG(image_path)
+
+            # If app is online saves the image contents in memory to pass image data to the template
+            if running_on_heroku:
+                data = io.BytesIO()
+                image.image.save(data, "JPEG")
+                encoded_img_data = base64.b64encode(data.getvalue())
+                img_data = encoded_img_data.decode('utf-8')
+            else:
+                img_data = None
+
+            # Get list of dict containing the most common colors including rgb, hex and percentage values
+            top_colors = image.analyze()
+
+            # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
+            color_palette = image.get_color_palette(delta=delta, nb_colors=nb_colors)
+
+            # Edit for React app (remove rgb from dict : couldnt jsonify)
+            # Slice top_colors to only display the 20 most common colors of the image
+            top_20_colors = []
+            for color in top_colors[:20]:
+                edited_color = {'hex': color.get('hex'), 'ratio': color.get('ratio')}
+                top_20_colors.append(edited_color)
+
+            return jsonify(top_20_colors=top_20_colors, img_data=img_data, filename=filename,
+                           color_palette=color_palette)
+
+
+@app.route("/api/settings", methods=["POST"])
+def setup():
+    data = request.get_json()
+    settings["delta"] = data.get("delta")
+    settings["nb_colors"] = data.get("nb_colors")
+
+    return jsonify(success=True)
 
 
 if __name__ == '__main__':
