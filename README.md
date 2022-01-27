@@ -5,6 +5,10 @@ Just upload an image and it will give you:
 - The image color palette (up to 10 colors)
 - The top 20 most common colors in that image including RGB and HEX values and the ratio for each color. 
 
+I also created 2 specific routes so this back-end app can work with this front-end app :
+
+https://github.com/Julien-B-py/image-color-palette-front
+
 
 ## Local installation
 - Clone this repository.
