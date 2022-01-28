@@ -117,10 +117,14 @@ def upload():
 
             # If app is online saves the image contents in memory to pass image data to the template
             if running_on_heroku:
-                data = io.BytesIO()
-                image.image.save(data, "JPEG")
-                encoded_img_data = base64.b64encode(data.getvalue())
-                img_data = encoded_img_data.decode('utf-8')
+                try:
+                    data = io.BytesIO()
+                    image.image.save(data, "JPEG")
+                    encoded_img_data = base64.b64encode(data.getvalue())
+                    img_data = encoded_img_data.decode('utf-8')
+                except KeyError:
+                    return 'PNG files with transparency are not supported.', 500
+
             else:
                 img_data = None
 
