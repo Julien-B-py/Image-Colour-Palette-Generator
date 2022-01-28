@@ -125,7 +125,10 @@ def upload():
                 img_data = None
 
             # Get list of dict containing the most common colors including rgb, hex and percentage values
-            top_colors = image.analyze()
+            try:
+                top_colors = image.analyze()
+            except ValueError:
+                return 'PNG files with transparency are not supported.', 500
 
             # Get the img color palette by ignoring similar colors and sort it from the darkest to the lighter color
             color_palette = image.get_color_palette(delta=delta, nb_colors=nb_colors)
@@ -139,6 +142,9 @@ def upload():
 
             return jsonify(top_20_colors=top_20_colors, img_data=img_data, filename=filename,
                            color_palette=color_palette)
+
+
+    return 'Make sure you submitted an image.', 500
 
 
 @app.route("/api/settings", methods=["POST"])
